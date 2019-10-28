@@ -1,0 +1,12 @@
+project_type: nodejs
+build:
+  unit_test:
+    image: framgiaciteam/laravel-workspace:latest
+    prepare:
+      - npm install
+      - framgia-ci run --logs
+test:
+  mocha:
+    ignore: false
+    command:
+      - npm test
