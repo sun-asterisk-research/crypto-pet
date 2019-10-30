@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+coverage.json
 
 client/src/contracts
 client/yarn.lock

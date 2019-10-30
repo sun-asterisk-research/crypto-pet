@@ -1,12 +1,9 @@
-const chai = require('chai');
-const { expect } = chai;
-const { expectRevert } = require('openzeppelin-test-helpers');
+const truffleAssert = require('truffle-assertions');
 
 var PetWallet = artifacts.require('PetWallet');
 
-contract('Testing PetWallet contract', async ([_, owner, owner1]) => {
+contract('Testing PetWallet contract', async ([_, owner, owner1, owner2]) => {
   let petWallet;
-
   describe('#savingMoney', async () => {
     before(async () => {
       petWallet = await PetWallet.new(owner, 0, 5, 5, 'saving');
@@ -24,18 +21,18 @@ contract('Testing PetWallet contract', async ([_, owner, owner1]) => {
     });
 
     it('only owner', async () => {
-      await expectRevert(
+      await truffleAssert.reverts(
         petWallet.savingMoney(1, { value: 10 ** 18, from: owner1 }),
         'only owner can send money to their wallet'
       );
     });
 
     it('validTransaction', async () => {
-      await expectRevert(
+      await truffleAssert.reverts(
         petWallet.savingMoney(0, { value: 0, from: owner }),
         'should send with a value'
       );
-      await expectRevert(
+      await truffleAssert.reverts(
         petWallet.savingMoney(2, { value: 10 ** 18, from: owner }),
         'can not send msg.value less than target value'
       );
@@ -78,34 +75,34 @@ contract('Testing PetWallet contract', async ([_, owner, owner1]) => {
 
   describe('#withdrawMoney', async () => {
     before(async () => {
-      petWallet = await PetWallet.new(owner, 0, 5, 5, 'withdraw');
+      petWallet = await PetWallet.new(owner2, 0, 5, 5, 'withdraw');
       providentFund = await petWallet.providentFund();
-      await petWallet.savingMoney(3, { value: 3 * 10 ** 18, from: owner });
+      await petWallet.savingMoney(3, { value: 3 * 10 ** 18, from: owner2 });
     });
 
     it('only owner', async () => {
-      await expectRevert(
+      await truffleAssert.reverts(
         petWallet.withdrawMoney(1, { from: owner1 }),
         'only owner can send money to their wallet'
       );
     });
 
     it('enoughMoney', async () => {
-      await expectRevert(
-        petWallet.withdrawMoney(5, { from: owner }),
+      await truffleAssert.reverts(
+        petWallet.withdrawMoney(5, { from: owner2 }),
         'not enough money to perform'
       );
     });
 
     it('freezingTime', async () => {
-      petWallet.withdrawMoney(1, { from: owner });
+      petWallet.withdrawMoney(1, { from: owner2 });
       await petWallet.checkIsFreezing();
       let isFreezing = await petWallet.isFreezing();
       assert.isTrue(isFreezing, 'After withdrawMoney, isFreezing should be true');
     });
 
     it('providentFund', async () => {
-      await petWallet.withdrawMoney(1, { from: owner });
+      await petWallet.withdrawMoney(1, { from: owner2 });
       let providentFund = await petWallet.providentFund();
       assert(providentFund.toNumber() == 1, 'providentFund should be decrease 1 tomo');
     });
