@@ -1,5 +1,5 @@
 const PetWalletFactory = artifacts.require('PetWalletFactory');
-const assert = require('assert');
+const truffleAssert = require('truffle-assertions');
 
 contract('PetWalletFactory', async ([_, owner, owner1]) => {
   describe('Initial balance', () => {
@@ -18,7 +18,6 @@ contract('PetWalletFactory', async ([_, owner, owner1]) => {
 
     it('Get pets by owner', async () => {
       allPets = await petWalletFactory.getAllPetAddressOf(owner1);
-      console.log(allPets.length);
       assert.strictEqual(allPets.length, 0);
     });
   });

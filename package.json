@@ -10,18 +10,14 @@
     "test": "./scripts/test.sh --network ganache"
   },
   "dependencies": {
-    "createjs-module": "^0.8.3",
     "dotenv": "^8.0.0",
-    "ganache-cli": "^6.4.4",
+    "ganache-cli": "6.1.6",
     "openzeppelin-solidity": "^2.3.0",
-    "timekeeper": "^2.2.0",
-    "truffle": "^5.0.1",
-    "truffle-hdwallet-provider": "^1.0.14"
+    "truffle": "^5.0.12",
+    "truffle-assertions": "^0.9.1",
+    "truffle-hdwallet-provider": "^1.0.6"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^5.1.0",
-    "openzeppelin-test-helpers": "^0.4.0",
-    "solidity-coverage": "^0.6.4"
+    "solidity-coverage": "^0.6.7"
   }
 }
