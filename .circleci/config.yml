@@ -51,3 +51,29 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+  deploy:
+    machine:
+      enabled: true
+
+    working_directory: ~/repo
+
+    steps:
+      - add_ssh_keys:
+          fingersprints:
+            - '5d:dc:47:89:77:c4:57:6e:42:32:c5:10:c8:b5:d4:08'
+      - run:
+          name: 'deploy'
+          command: ssh chientm@139.162.40.88 'cd crypto-pet && . deploy.sh'
+
+workflows:
+  version: 2
+
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: release
